@@ -1,0 +1,470 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">PROJECT_BETA // UNDER CONSTRUCTION</title>
+    <style vid="5">
+        :root {
+            --bg-color: #FDE8EC;
+            --ink-color: #000000;
+            --accent-red: #D93025;
+            --accent-blue: #6A8CAF;
+            --accent-green: #2EA84E;
+            --accent-yellow: #F9C846;
+            --accent-toast: #D4A373;
+            --border-width: 1px;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --spacing-unit: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: crosshair; 
+        }
+
+        body {
+            background: linear-gradient(135deg, #FDE8EC 0%, #FCE4F0 40%, #F9EAF5 70%, #EEE8FB 100%);
+            color: var(--ink-color);
+            font-family: var(--font-main);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            grid-template-rows: 80px 1fr 80px;
+            height: 100%;
+            width: 100%;
+            border: var(--border-width) solid var(--ink-color);
+        }
+
+        
+        .cell {
+            border-right: var(--border-width) solid var(--ink-color);
+            border-bottom: var(--border-width) solid var(--ink-color);
+            padding: var(--spacing-unit);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: transparent;
+            z-index: 10; 
+            pointer-events: none; 
+        }
+
+        .cell > * {
+            pointer-events: auto; 
+        }
+
+        
+        .cell:nth-child(3n) { border-right: none; } 
+        .cell:nth-child(n+4) { border-bottom: none; }
+
+        
+        h1 {
+            font-size: 4rem;
+            line-height: 0.9;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid var(--ink-color);
+            padding: 4px 8px;
+            display: inline-block;
+            background: white;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .meta-text {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            max-width: 200px;
+            font-weight: 500;
+        }
+
+        
+        
+        
+        .zone-brand {
+            justify-content: center;
+        }
+        
+        
+        .zone-date {
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        
+        .zone-stage {
+            grid-column: 1 / span 3;
+            grid-row: 2;
+            border-right: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1; 
+        }
+
+        
+        .zone-credits {
+            justify-content: flex-end;
+        }
+
+        
+        .zone-action {
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+            gap: 20px;
+        }
+
+        
+        .zone-link {
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+
+        
+
+        .big-statement {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: none;
+            mix-blend-mode: exclusion; 
+            width: 100%;
+            z-index: 20;
+        }
+
+        .btn {
+            background: var(--ink-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.1s ease, background 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: #333;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--ink-color);
+            color: var(--ink-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--ink-color);
+            color: white;
+        }
+
+        
+        #draw-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .brush-controls {
+            position: absolute;
+            top: 50%;
+            right: 24px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 50;
+        }
+
+        .brush-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--ink-color);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .brush-btn.active {
+            background: var(--ink-color);
+            color: white;
+        }
+
+        .brush-preview {
+            width: 16px;
+            height: 16px;
+            background: #ccc;
+        }
+
+        
+        
+        .sticker {
+            position: absolute;
+            background: white;
+            border: 1px solid black;
+            padding: 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            z-index: 15;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .sticker.pos-1 { top: 15%; left: 10%; transform: rotate(-5deg); animation-delay: 0s; }
+        .sticker.pos-2 { bottom: 20%; right: 15%; transform: rotate(3deg); animation-delay: 1s; }
+        .sticker.pos-3 { top: 30%; right: 25%; transform: rotate(8deg); animation-delay: 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(-3deg); }
+        }
+
+        
+        .trail-part {
+            position: absolute;
+            pointer-events: none;
+            will-change: transform, opacity;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        
+        @media (max-width: 900px) {
+            .layout-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto 1fr auto auto;
+            }
+            .zone-stage {
+                grid-column: 1 / span 2;
+                grid-row: 2;
+            }
+            .big-statement h1 {
+                font-size: 2.5rem;
+            }
+            .zone-brand { border-right: 1px solid black; }
+            .zone-date { border-right: none; }
+            .brush-controls { display: none; } 
+        }
+    </style>
+</head>
+<body vid="6">
+
+    <div class="layout-grid" vid="7">
+        
+        <div class="cell" style="grid-column: 1 / span 3; border-right: none; align-items: center; justify-content: center; flex-direction: row; gap: 16px;" vid="8">
+            <div class="label" vid="9">kelikeli</div>
+            <div class="meta-text" style="text-align: center; max-width: 100%;" vid="10">欢迎来到 kelikeli 的世界 — 正在施工中，敬请期待</div>
+        </div>
+
+        
+        <div class="cell zone-stage" vid="11">
+            <canvas id="draw-layer" vid="12"></canvas>
+            
+            <div class="big-statement" vid="13">
+                <h1 vid="14">I Am<br vid="15">Building<br vid="16">The Future</h1>
+            </div>
+
+            
+            <div class="sticker pos-1" vid="17">
+                (VISION)<br vid="18">Defining the unknown
+            </div>
+            <div class="sticker pos-2" vid="19">
+                (STATUS)<br vid="20">0 errors, 100 ideas
+            </div>
+            <div class="sticker pos-3" vid="21">
+                (STRATEGY)<br vid="22">Polishing the MVP
+            </div>
+
+            
+            <div class="brush-controls" vid="23">
+                <div class="brush-btn active" onclick="setBrush('flower')" title="Flower" vid="24">
+                    🌸
+                </div>
+                <div class="brush-btn" onclick="setBrush('leaf')" title="Leaf" vid="25">
+                    🍃
+                </div>
+                <div class="brush-btn" onclick="setBrush('wand')" title="Magic Wand" vid="26">
+                    🪄
+                </div>
+                <div class="brush-btn" onclick="setBrush('crown')" title="Crown" vid="27">
+                    👑
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="cell" style="grid-column: 1 / span 3; border-right: none; border-bottom: none; flex-direction: row; align-items: center; justify-content: center; gap: 24px;" vid="28">
+            <div class="meta-text" style="max-width: 100%;" vid="29">先去 blog 玩玩吧 →</div>
+            <a href="#" class="btn" vid="30">去 Blog 看看 ↗</a>
+        </div>
+    </div>
+
+    <script vid="31">
+        
+
+        const canvas = document.getElementById('draw-layer');
+        const ctx = canvas.getContext('2d');
+        const container = document.querySelector('.zone-stage');
+        let bounds = container.getBoundingClientRect();
+        
+        let mouse = { x: -100, y: -100 };
+        let lastMouse = { x: -100, y: -100 };
+        let brushType = 'flower'; 
+        let hue = 0;
+
+        
+        function resize() {
+            bounds = container.getBoundingClientRect();
+            canvas.width = bounds.width;
+            canvas.height = bounds.height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        
+        document.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+            
+            
+            if (mouse.x > 0 && mouse.x < rect.width && mouse.y > 0 && mouse.y < rect.height) {
+                draw();
+            }
+            lastMouse.x = mouse.x;
+            lastMouse.y = mouse.y;
+        });
+
+        function setBrush(type) {
+            brushType = type;
+            document.querySelectorAll('.brush-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        
+        
+        
+        
+        function draw() {
+            const dist = Math.hypot(mouse.x - lastMouse.x, mouse.y - lastMouse.y);
+            
+            
+            if (dist < 15) return;
+
+            createParticle(mouse.x, mouse.y);
+        }
+
+        function createParticle(x, y) {
+            const el = document.createElement('div');
+            el.classList.add('trail-part');
+            el.style.border = 'none';
+            el.style.background = 'transparent';
+            el.style.display = 'flex';
+            el.style.alignItems = 'center';
+            el.style.justifyContent = 'center';
+
+            const emojis = {
+                flower: ['🌸','🌺','🌼','🌻','💮'],
+                leaf:   ['🍃','🌿','🍀','🌱','🍂'],
+                wand:   ['🪄','✨','⭐','💫','🌟'],
+                crown:  ['👑','💛','🏆','✨','💎']
+            };
+            const list = emojis[brushType] || emojis['flower'];
+            const emoji = list[Math.floor(Math.random() * list.length)];
+            const size = 20 + Math.random() * 16;
+            el.style.fontSize = size + 'px';
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+            el.textContent = emoji;
+
+            
+            const rot = (Math.random() * 20) - 10;
+            
+            el.style.left = (x - 20) + 'px';
+            el.style.top = (y - 10) + 'px';
+            el.style.transform = `rotate(${rot}deg)`;
+            
+            container.appendChild(el);
+
+            
+            setTimeout(() => {
+                el.style.transition = 'opacity 1s, transform 1s';
+                el.style.opacity = '0';
+                el.style.transform = `translateY(50px) rotate(${rot}deg)`;
+            }, 800);
+
+            setTimeout(() => {
+                el.remove();
+            }, 1800);
+        }
+
+        
+        let autoX = 100;
+        let autoY = 100;
+        let angle = 0;
+        
+        function demo() {
+            if (mouse.x > 0) return; 
+            
+            angle += 0.05;
+            autoX = (bounds.width / 2) + Math.cos(angle) * 150;
+            autoY = (bounds.height / 2) + Math.sin(angle * 2) * 100;
+            
+            
+            let tempLast = { ...lastMouse };
+            lastMouse.x = autoX - 10; 
+            lastMouse.y = autoY - 10;
+            mouse.x = autoX;
+            mouse.y = autoY;
+            
+            createParticle(autoX, autoY);
+            requestAnimationFrame(demo);
+        }
+        
+        
+        setTimeout(demo, 500);
+
+    </script>
+
+</body></html>
